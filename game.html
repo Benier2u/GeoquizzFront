@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <meta name="description" content="" />
 <meta name="author" content="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+crossorigin=""/>
 <!--[if IE]>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <![endif]-->
@@ -51,22 +54,9 @@ GEO QUICHE
 <!--HOME SECTION START-->
 <div id="home" >
 <div class="container">
-<div class="row">
-<div class="row animate-in" data-anim-type="fade-in-up">
-<div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-8 col-lg-offset-2 scroll-me">
-
-
-<p >
-Notre jeu est super bien en théorie
-
-</p>
-<a href="game.html" class=" btn button-custom btn-custom-two">Play </a>
+        <div id="mapid" style="height: 500px"></div>
 </div>
 </div>
-</div>
-
-</div>
-
 
 <!--CONTACT SECTION END-->
 
@@ -89,7 +79,72 @@ Notre jeu est super bien en théorie
 <!-- CUSTOM SCRIPTS -->
 <script src="assets/js/custom-solid.js"></script>
 
+<script src="vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+crossorigin=""></script>
+
+<script>
+var map = L.map('mapid').setView([51.505, -0.09], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+L.marker([51.5, -0.09]).addTo(map)
+    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+    .openPopup();
+
+
+
+//constructeur de la carte qui prend en paramêtre le conteneur HTML
+
+//dans lequel la carte doit s'afficher et les options
+
+class Photo {
+  constructor(id, description,position,url) {
+    this.id = id;
+    this.description = description;
+    this.position = position;
+    this.url = url;
+  }
+}
+/*var game = new Vue({
+    data: {
+        id: "",
+        token: "",
+        nb_photos: 0,
+        status: "",
+        score: 0,
+        joueur: "",
+        photos: []
+
+    },
+    methods: {
+
+    },
+    created() {
+       axios
+      .get('-------------------')
+      .then(response => {
+          this.id=response.id;
+          this.token=response.token
+          this.nb_photos=response.nb_photos,
+          this.status=response.status,
+          this.score=response.score,
+          this.joueur=response.joueur,
+          response.photos.forEach(element => {
+              let photo = new Photo(element.id,element.description,element.position,element.url);
+              photos.push(photo)
+          });
+      })
+    }
+
+})*/
+
+</script>
 
 </body>
 
