@@ -54,7 +54,7 @@ GEO QUICHE
 <!--HOME SECTION START-->
 <div id="home" >
 <div class="container">
-        <div id="mapid" style="height: 500px"></div>
+        <div id="mapid" style="height: 700px"></div>
 </div>
 </div>
 
@@ -87,16 +87,28 @@ integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcx
 crossorigin=""></script>
 
 <script>
-var map = L.map('mapid').setView([51.505, -0.09], 13);
+var map = L.map('mapid').setView([48.692054, 6.184417], 14);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-L.marker([51.5, -0.09]).addTo(map)
-    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-    .openPopup();
 
+var corner1 = L.latLng(48.649696, 6.254311),
+corner2 = L.latLng(48.718602, 6.121101),
+bounds = L.latLngBounds(corner1, corner2);
+
+L.rectangle(bounds, {color: "#000", weight: 2.5, fillOpacity: 0}).addTo(map);
+// zoom the map to the rectangle bounds
+map.fitBounds(bounds);
+
+map.setMaxBounds(bounds);
+// zoom the map to the rectangle bounds
+function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
+}
+
+map.on('click', onMapClick);
 
 
 //constructeur de la carte qui prend en paramêtre le conteneur HTML
