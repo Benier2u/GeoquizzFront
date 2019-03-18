@@ -155,13 +155,16 @@
             this.current_pos.setLatLng([e.latlng.lat, e.latlng.lng])
           }
         },
+        calculDistance(x1,y1,x2,y2){
+
+        },
         nextPhoto() {
           if (this.current_pos == null) {
             alert('Vous devez placer le pointeur en click sur la carte avant de valider !')
           } else {
-            var distance = Math.sqrt(Math.pow(this.current_pos.getLatLng().lat - this.current_photo.position.lat, 2) + Math.pow(this.current_pos.getLatLng().lng - this.current_photo.position.lng, 2))
+          var distance = ((this.current_pos.getLatLng().lat - this.current_photo.position.lat)*(this.current_pos.getLatLng().lat - this.current_photo.position.lat)) + ((this.current_pos.getLatLng().lng - this.current_photo.position.lng)*(this.current_pos.getLatLng().lng - this.current_photo.position.lng))
+            distance = Math.sqrt(distance)
             distance = Math.round(distance * 500);
-            console.log(distance)
             if (distance > 10) distance = 10;
             this.score += distance;
             if (this.current_target == this.nb_photos - 1) {
@@ -211,31 +214,35 @@
         this.testmark = L.marker([48.6828782, 6.1611891], { icon: testIcon }).addTo(this.map);*/
 
         this.map.on('click', this.selectPos);
-
-
+        var params = this.extractUrlParams()
         axios
-          .get("http://geoquizzatelier.pagekite.me/series")
+          .post('http://back-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
           .then(response => {
-            axios
-              .post("http://geoquizzatelier.pagekite.me/series/" + response.data[0].id + "/parties", {})
-              .then(response => {
-                var params = this.extractUrlParams()
-                this.joueur = params.player;
-                this.id = response.data.id;
-                this.token = response.data.token;
-                this.nb_photos = response.data.photos.length;
-                this.status = response.data.status;
-                this.joueur = response.data.joueur;
-                for (i = 0; i < this.nb_photos; i++) {
-                  var element = response.data.photos[i];
-                  this.photos.push(new Photo(element.id, element.description, element.position, element.url));
-                };
-                this.current_photo = this.photos[this.current_target];
-              });
+            if (response) {
+              axios
+                .get("http://back-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
+                  headers: {
+                    'x-lbs-token': response.data.token
+                  }
+                })
+                .then(response => {
+                  this.joueur = params.player;
+                  this.id = response.data.id;
+                  this.token = response.data.token;
+                  this.nb_photos = response.data.photos.length;
+                  this.status = response.data.status;
+                  this.joueur = response.data.joueur;
+                  for (i = 0; i < this.nb_photos; i++) {
+                    var element = response.data.photos[i];
+                    this.photos.push(new Photo(element.id, element.description, element.position, element.url));
+                  }
+                  this.current_target = 0;
+                  this.current_photo = this.photos[this.current_target];
+
+                })
+            }
           })
-
       }
-
     })
 
   </script>
