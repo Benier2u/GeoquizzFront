@@ -1,180 +1,244 @@
 ﻿<!DOCTYPE html>
-<html lang="en" class="no-js" >
+<html lang="en" class="no-js">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-crossorigin=""/>
-<!--[if IE]>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="" />
+  <!--[if IE]>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <![endif]-->
-<title>LIGHT WAVE</title>
-<!-- BOOTSTRAP CORE CSS -->
-<link href="assets/css/bootstrap.css" rel="stylesheet" />
-<!-- ION ICONS STYLES -->
-<link href="assets/css/ionicons.css" rel="stylesheet" />
-<!-- FONT AWESOME ICONS STYLES -->
-<link href="assets/css/font-awesome.css" rel="stylesheet" />
-<!-- FANCYBOX POPUP STYLES -->
-<link href="assets/js/source/jquery.fancybox.css" rel="stylesheet" />
-<!-- STYLES FOR VIEWPORT ANIMATION -->
-<link href="assets/css/animations.min.css" rel="stylesheet" />
-<!-- CUSTOM CSS -->
-<link href="assets/css/style-solid-black.css" rel="stylesheet" />
-<!-- HTML5 Shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
+  <title>GeoQuizz</title>
+  <!-- BOOTSTRAP CORE CSS -->
+  <link href="assets/css/bootstrap.css" rel="stylesheet" />
+  <!-- ION ICONS STYLES -->
+  <link href="assets/css/ionicons.css" rel="stylesheet" />
+  <!-- FONT AWESOME ICONS STYLES -->
+  <link href="assets/css/font-awesome.css" rel="stylesheet" />
+  <!-- FANCYBOX POPUP STYLES -->
+  <link href="assets/js/source/jquery.fancybox.css" rel="stylesheet" />
+  <!-- STYLES FOR VIEWPORT ANIMATION -->
+  <link href="assets/css/animations.min.css" rel="stylesheet" />
+  <!-- CUSTOM CSS -->
+  <link href="assets/css/style-solid-black.css" rel="stylesheet" />
+  <!-- HTML5 Shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
+
 <body data-spy="scroll" data-target="#menu-section">
-<!--MENU SECTION START-->
-<div class="navbar navbar-inverse navbar-fixed-top scroll-me" id="menu-section" >
-<div class="container">
-<div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-</button>
-<a class="navbar-brand" href="#">
+  <!--MENU SECTION START-->
+  <div class="navbar navbar-inverse navbar-fixed-top scroll-me" id="menu-section">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <p class="navbar-brand">
 
-GEO QUICHE
+          GEOQUIZZ
 
-</a>
-</div>
+        </p>
+      </div>
 
-</div>
-</div>
-<!--MENU SECTION END-->
-<!--HOME SECTION START-->
-<div id="home" style="display: flex">
-<div class="infos" style="width:20%;margin:auto">
-        <div class="card" style="width: 18rem;margin:5%;width:90%">
-                <img class="card-img-top" style="max-width:100%" src="https://www.nancy.fr/fileadmin/_processed_/b/d/csm_2008-07-place-stanislas_40ceebef1f.jpg" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Trouve cet endroit !</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-              </div>
-</div>
-<div class="container" style="width:60%;padding:0px">
-        <div id="mapid" style="height: 700px"></div>
-</div>
-<div class="menu" style="width:20%;margin:auto">
-        <div class="card" style="width: 18rem;margin:auto">
-                <div class="card-body">
-                  <p class="card-text">Nombre de Photos restantes :</p>
-                  <p class="card-text">0 / 10</p>
-                  <a href="#" class="btn btn-primary">Fils de mouette</a>
-                </div>
-              </div>
-</div>
-</div>
+    </div>
+  </div>
+  <!--MENU SECTION END-->
+  <!--HOME SECTION START-->
+  <div id="home" style="display: flex">
+    <div class="infos" style="width:20%;margin:auto">
 
-<!--CONTACT SECTION END-->
+    </div>
+    <div class="container" style="width:60%;padding:0px">
+      <div id="mapid" style="height: 700px"></div>
+    </div>
+    <div id="menu" style="width:20%;margin:auto">
+      <div class="card" style="width: 18rem;margin:5%;width:90%">
+        <img class="card-img-top" style="max-width:100%" v-bind:src="current_photo.url" alt="Photo non trouvé">
+        <div class="card-body">
+          <h5 class="card-title">Trouve cet endroit !</h5>
+        </div>
+      </div>
+      <hr color="white" style="margin: 10%">
+      <div class="card" style="width: 18rem;margin:auto">
+        <div class="card-body">
+          <p class="card-text">Avancement de la Partie :</p>
+          <p class="card-text">{{ current_target + 1 }} / {{ nb_photos }}</p>
+          <a v-on:click="nextPhoto()" class="btn btn-primary">Valider</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME -->
-<!-- CORE JQUERY -->
-<script src="assets/js/jquery-1.11.1.js"></script>
-<!-- BOOTSTRAP SCRIPTS -->
-<script src="assets/js/bootstrap.js"></script>
-<!-- EASING SCROLL SCRIPTS PLUGIN -->
-<script src="assets/js/vegas/jquery.vegas.min.js"></script>
-<!-- VEGAS SLIDESHOW SCRIPTS -->
-<script src="assets/js/jquery.easing.min.js"></script>
-<!-- FANCYBOX PLUGIN -->
-<script src="assets/js/source/jquery.fancybox.js"></script>
-<!-- ISOTOPE SCRIPTS -->
-<script src="assets/js/jquery.isotope.js"></script>
-<!-- VIEWPORT ANIMATION SCRIPTS   -->
-<script src="assets/js/appear.min.js"></script>
-<script src="assets/js/animations.min.js"></script>
-<!-- CUSTOM SCRIPTS -->
-<script src="assets/js/custom-solid.js"></script>
+  <!--CONTACT SECTION END-->
 
-<script src="vue.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME -->
+  <!-- CORE JQUERY -->
+  <script src="assets/js/jquery-1.11.1.js"></script>
+  <!-- BOOTSTRAP SCRIPTS -->
+  <script src="assets/js/bootstrap.js"></script>
+  <!-- EASING SCROLL SCRIPTS PLUGIN -->
+  <script src="assets/js/vegas/jquery.vegas.min.js"></script>
+  <!-- VEGAS SLIDESHOW SCRIPTS -->
+  <script src="assets/js/jquery.easing.min.js"></script>
+  <!-- FANCYBOX PLUGIN -->
+  <script src="assets/js/source/jquery.fancybox.js"></script>
+  <!-- ISOTOPE SCRIPTS -->
+  <script src="assets/js/jquery.isotope.js"></script>
+  <!-- VIEWPORT ANIMATION SCRIPTS   -->
+  <script src="assets/js/appear.min.js"></script>
+  <script src="assets/js/animations.min.js"></script>
+  <!-- CUSTOM SCRIPTS -->
+  <script src="assets/js/custom-solid.js"></script>
 
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-crossorigin=""></script>
+  <script src="vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<script>
-var map = L.map('mapid').setView([48.692054, 6.184417], 14);
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+  <script>
 
 
-var corner1 = L.latLng(48.649696, 6.254311),
-corner2 = L.latLng(48.718602, 6.121101),
-bounds = L.latLngBounds(corner1, corner2);
+    //constructeur de la carte qui prend en paramêtre le conteneur HTML
 
-L.rectangle(bounds, {color: "#000", weight: 2.5, fillOpacity: 0}).addTo(map);
-// zoom the map to the rectangle bounds
-map.fitBounds(bounds);
+    //dans lequel la carte doit s'afficher et les options
 
-map.setMaxBounds(bounds);
-// zoom the map to the rectangle bounds
-function onMapClick(e) {
-    alert("You clicked the map at " + e.latlng);
-}
-
-map.on('click', onMapClick);
+    class Photo {
+      constructor(id, description, position, url) {
+        this.id = id;
+        this.description = description;
+        this.url = url;
+        var res = position.split(' ');
+        this.position = { lat: res[0], lng: res[1] }
+      }
+    }
 
 
-//constructeur de la carte qui prend en paramêtre le conteneur HTML
-
-//dans lequel la carte doit s'afficher et les options
-
-class Photo {
-  constructor(id, description,position,url) {
-    this.id = id;
-    this.description = description;
-    this.position = position;
-    this.url = url;
-  }
-}
-/*var game = new Vue({
-    data: {
+    /*
+    current_pos = position du marker du joueur
+    current target = numero de la photo en cours
+    current_photo = photo en cours
+    
+    */
+    var game = new Vue({
+      el: '#menu',
+      data: {
         id: "",
         token: "",
         nb_photos: 0,
+        current_target: 0,
+        current_pos: null,
+        current_photo: "",
         status: "",
         score: 0,
         joueur: "",
-        photos: []
+        photos: [],
+        map: ""
 
-    },
-    methods: {
+      },
+      methods: {
+        selectPos(e) {
+          if (this.current_pos == null) {
+            this.current_pos = L.marker([e.latlng.lat, e.latlng.lng], { draggable: true }).addTo(this.map);
+          } else {
+            this.current_pos.setLatLng([e.latlng.lat, e.latlng.lng])
+          }
+        },
+        nextPhoto() {
+          if (this.current_pos == null) {
+            alert('Vous devez placer le pointeur en click sur la carte avant de valider !')
+          } else {
+            var distance = Math.sqrt(Math.pow(this.current_pos.getLatLng().lat - this.current_photo.position.lat, 2) + Math.pow(this.current_pos.getLatLng().lng - this.current_photo.position.lng, 2))
+            distance = Math.round(distance * 500);
+            console.log(distance)
+            if (distance > 10) distance = 10;
+            this.score += distance;
+            if (this.current_target == this.nb_photos - 1) {
+              this.endGame();
+            } else {
+              this.current_target++;
+              this.current_photo = this.photos[this.current_target];
+            }
+            this.current_pos.remove()
+            this.current_pos = null;
+          }
+        },
+        endGame() {
+          var finalScore = ((this.nb_photos * 10) - this.score);
+          document.location.href = "score.html?player=" + this.joueur + "&score=" + finalScore + "&total=" + this.nb_photos;
+        },
+        extractUrlParams() {
+          var t = location.search.substring(1).split('&');
+          var f = [];
+          for (var i = 0; i < t.length; i++) {
+            var x = t[i].split('=');
+            f[x[0]] = x[1];
+          }
+          return f;
+        }
+      },
+      created() {
+        this.map = L.map('mapid').setView([48.692054, 6.184417], 14);
 
-    },
-    created() {
-       axios
-      .get('-------------------')
-      .then(response => {
-          this.id=response.id;
-          this.token=response.token
-          this.nb_photos=response.nb_photos,
-          this.status=response.status,
-          this.score=response.score,
-          this.joueur=response.joueur,
-          response.photos.forEach(element => {
-              let photo = new Photo(element.id,element.description,element.position,element.url);
-              photos.push(photo)
-          });
-      })
-    }
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
 
-})*/
 
-</script>
+        var corner1 = L.latLng(48.649696, 6.254311),
+          corner2 = L.latLng(48.718602, 6.121101),
+          bounds = L.latLngBounds(corner1, corner2);
+
+        L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
+
+        this.map.fitBounds(bounds);
+        this.map.setMaxBounds(bounds);
+
+        /*var testIcon = L.icon({
+          iconUrl: 'https://www.icone-png.com/ico/8/7603.ico', iconSize: [20, 20]
+        })
+        this.testmark = L.marker([48.6828782, 6.1611891], { icon: testIcon }).addTo(this.map);*/
+
+        this.map.on('click', this.selectPos);
+
+
+        axios
+          .get("http://geoquizzatelier.pagekite.me/series")
+          .then(response => {
+            axios
+              .post("http://geoquizzatelier.pagekite.me/series/" + response.data[0].id + "/parties", {})
+              .then(response => {
+                var params = this.extractUrlParams()
+                this.joueur = params.player;
+                this.id = response.data.id;
+                this.token = response.data.token;
+                this.nb_photos = response.data.photos.length;
+                this.status = response.data.status;
+                this.joueur = response.data.joueur;
+                for (i = 0; i < this.nb_photos; i++) {
+                  var element = response.data.photos[i];
+                  this.photos.push(new Photo(element.id, element.description, element.position, element.url));
+                };
+                this.current_photo = this.photos[this.current_target];
+              });
+          })
+
+      }
+
+    })
+
+  </script>
 
 </body>
 
