@@ -110,7 +110,7 @@
   <script>
 
 
-// Classe photo pour mapper facilement les données lors de la recupération
+    // Classe photo pour mapper facilement les données lors de la recupération
     class Photo {
       constructor(id, description, position, url) {
         this.id = id;
@@ -153,7 +153,7 @@
             this.current_pos.setLatLng([e.latlng.lat, e.latlng.lng])
           }
         },
-        calculDistance(x1,y1,x2,y2){
+        calculDistance(x1, y1, x2, y2) {
 
         },
         //Action lors du passage a la photo suivante: ajout du score, reset du marker, changement de photo
@@ -161,7 +161,7 @@
           if (this.current_pos == null) {
             alert('Vous devez placer le pointeur en click sur la carte avant de valider !')
           } else {
-          var distance = ((this.current_pos.getLatLng().lat - this.current_photo.position.lat)*(this.current_pos.getLatLng().lat - this.current_photo.position.lat)) + ((this.current_pos.getLatLng().lng - this.current_photo.position.lng)*(this.current_pos.getLatLng().lng - this.current_photo.position.lng))
+            var distance = ((this.current_pos.getLatLng().lat - this.current_photo.position.lat) * (this.current_pos.getLatLng().lat - this.current_photo.position.lat)) + ((this.current_pos.getLatLng().lng - this.current_photo.position.lng) * (this.current_pos.getLatLng().lng - this.current_photo.position.lng))
             distance = Math.sqrt(distance)
             distance = Math.round(distance * 500);
             if (distance > 10) distance = 10;
@@ -194,52 +194,69 @@
       },
       //initialisation du jeu: recuperation des informations et mappage, creation de la carte, delimitation de la carte
       created() {
-        this.map = L.map('mapid').setView([48.692054, 6.184417], 14);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.map);
-
-
-        var corner1 = L.latLng(48.649696, 6.254311),
-          corner2 = L.latLng(48.718602, 6.121101),
-          bounds = L.latLngBounds(corner1, corner2);
-
-        L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
-
-        this.map.fitBounds(bounds);
-        this.map.setMaxBounds(bounds);
-
-        this.map.on('click', this.selectPos);
-        var params = this.extractUrlParams()
+        var that=this
         axios
-          .post('http://player-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
+          .get('http://player-geoquizzatelier.pagekite.me/series/')
           .then(response => {
-            if (response) {
-              axios
-                .get("http://player-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
-                  headers: {
-                    'x-lbs-token': response.data.token
-                  }
-                })
-                .then(response => {
-                  this.joueur = params.player;
-                  this.id = response.data.id;
-                  
-                  this.token = response.data.token;
-                  this.nb_photos = response.data.photos.length;
-                  this.status = response.data.status;
-                  this.joueur = response.data.joueur;
-                  for (i = 0; i < this.nb_photos; i++) {
-                    var element = response.data.photos[i];
-                    this.photos.push(new Photo(element.id, element.description, element.position, element.url));
-                  }
-                  this.current_target = 0;
-                  this.current_photo = this.photos[this.current_target];
+            console.log(response);
+            var coordonnee = this.position.split(' ');
+            this.map = L.map('mapid').setView([this.coordonnee[0], this.coordonnee[1]], 14);
+            this.position = response.data[0].map_refs;
+            var corner1 = L.latLng(this.coordonnee[0] + 50, this.coordonnee[1] + 50),
+              corner2 = L.latLng(this.coordonnee[0] - 50, this.coordonnee[1] - 50),
+              bounds = L.latLngBounds(corner1, corner2);
 
-                })
-            }
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(this.map);
+
+
+
+
+            L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
+
+            this.map.fitBounds(bounds);
+            this.map.setMaxBounds(bounds);
+
+
+
+            this.map.on('click', this.selectPos);
+            var params = this.extractUrlParams()
+            axios
+              .post('http://player-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
+              .then(response => {
+                if (response) {
+                  axios
+                    .get("http://player-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
+                      headers: {
+                        'x-lbs-token': response.data.token
+                      }
+                    })
+                    .then(response => {
+                      this.joueur = params.player;
+                      this.id = response.data.id;
+
+                      this.token = response.data.token;
+                      this.nb_photos = response.data.photos.length;
+                      this.status = response.data.status;
+                      this.joueur = response.data.joueur;
+                      for (i = 0; i < this.nb_photos; i++) {
+                        var element = response.data.photos[i];
+                        this.photos.push(new Photo(element.id, element.description, element.position, element.url));
+                      }
+                      this.current_target = 0;
+                      this.current_photo = this.photos[this.current_target];
+
+                    })
+                }
+              })
           })
+          .catch(error => {
+            console.log("pas de coordonnée");
+          });
+
+
+
       }
     })
 
