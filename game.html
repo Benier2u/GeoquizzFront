@@ -228,6 +228,7 @@
                 .then(response => {
                   this.joueur = params.player;
                   this.id = response.data.id;
+                  
                   this.token = response.data.token;
                   this.nb_photos = response.data.photos.length;
                   this.status = response.data.status;
