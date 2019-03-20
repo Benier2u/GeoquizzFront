@@ -195,37 +195,24 @@
           return f;
         }
       },
-      //initialisation du jeu: recuperation des informations et mappage, creation de la carte, delimitation de la carte
+      //initialisation du jeu: recuperation des informations et mappage, creation de la carte, delimitation de la carte, positionnement sur la carte
       created() {
-        this.map = L.map('mapid').setView([0, 0], 14);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.map);
-
-
-        this.corner1 = L.latLng(0, 0),
-        this.corner2 = L.latLng(0, 0),
-        this.bounds = L.latLngBounds(this.corner1, this.corner2);
-
-        
-
-
-
-        this.map.on('click', this.selectPos);
         axios.get('http://player-geoquizzatelier.pagekite.me/series/')
           .then(response => {
-            var coordonnee = this.position.split(' ');
-            console.log(coordonnee)
+            var coordonnee = response.data[0].map_refs.split(' ');
             this.map = L.map('mapid').setView([coordonnee[0], coordonnee[1]], 14);
-            this.position = response.data[0].map_refs;
-            console.log(this.position)
-            this.corner1 = L.latLng(coordonnee[0] + 50, coordonnee[1] + 50),
-            this.corner2 = L.latLng(coordonnee[0] - 50, coordonnee[1] - 50),
-            this.bounds = L.latLngBounds(this.corner1, this.corner2);
-            L.rectangle(this.bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
-            this.map.fitBounds(this.bounds);
-        this.map.setMaxBounds(this.bounds);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(this.map);
+            this.map.on('click', this.selectPos);
+
+            var corner1 = L.latLng(new Number(coordonnee[0]) + 0.035, new Number(coordonnee[1]) + 0.055);
+            var corner2 = L.latLng(new Number(coordonnee[0]) - 0.035, coordonnee[1] - 0.055);
+            var bounds = L.latLngBounds(corner1, corner2);
+            
+            L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
+            this.map.fitBounds(bounds);
+            this.map.setMaxBounds(bounds);
 
           })
           .catch(error => {
@@ -246,7 +233,7 @@
                 .then(response => {
                   this.joueur = params.player;
                   this.id = response.data.id;
-                  
+
                   this.token = response.data.token;
                   this.nb_photos = response.data.photos.length;
                   this.status = response.data.status;
