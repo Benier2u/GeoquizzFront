@@ -213,11 +213,11 @@
         this.map.on('click', this.selectPos);
         var params = this.extractUrlParams()
         axios
-          .post('http://back-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
+          .post('http://player-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
           .then(response => {
             if (response) {
               axios
-                .get("http://back-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
+                .get("http://player-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
                   headers: {
                     'x-lbs-token': response.data.token
                   }
