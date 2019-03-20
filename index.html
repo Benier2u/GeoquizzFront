@@ -143,6 +143,9 @@
                         if (response) {
                             this.seriesList = response.data;
                         }
+                    }).catch(error => {
+                        this.noConnection();
+                        console.log(error)
                     })
             }
         })
