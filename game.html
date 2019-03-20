@@ -141,7 +141,9 @@
         score: 0,
         joueur: "",
         photos: [],
-        map: ""
+        map: "",
+        corner1: 0,
+        corner2: 0
 
       },
       methods: {
@@ -194,7 +196,7 @@
       },
       //initialisation du jeu: recuperation des informations et mappage, creation de la carte, delimitation de la carte
       created() {
-        var that=this
+        var that=this;
         axios
           .get('http://player-geoquizzatelier.pagekite.me/series/')
           .then(response => {
@@ -202,11 +204,12 @@
             var coordonnee = this.position.split(' ');
             this.map = L.map('mapid').setView([this.coordonnee[0], this.coordonnee[1]], 14);
             this.position = response.data[0].map_refs;
-            var corner1 = L.latLng(this.coordonnee[0] + 50, this.coordonnee[1] + 50),
-              corner2 = L.latLng(this.coordonnee[0] - 50, this.coordonnee[1] - 50),
-              bounds = L.latLngBounds(corner1, corner2);
+            this.corner1 = L.latLng(this.coordonnee[0] + 50, this.coordonnee[1] + 50),
+            this.corner2 = L.latLng(this.coordonnee[0] - 50, this.coordonnee[1] - 50),
+              bounds = L.latLngBounds(this.corner1, this.corner2);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      })
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.map);
 
@@ -250,14 +253,10 @@
                     })
                 }
               })
-          })
           .catch(error => {
             console.log("pas de coordonnée");
           });
-
-
-
-      }
+    }
     })
 
   </script>
