@@ -143,7 +143,8 @@
         photos: [],
         map: "",
         corner1: 0,
-        corner2: 0
+        corner2: 0,
+        bound: ""
 
       },
       methods: {
@@ -196,67 +197,71 @@
       },
       //initialisation du jeu: recuperation des informations et mappage, creation de la carte, delimitation de la carte
       created() {
-        var that=this;
+        let that = this;
         axios
-          .get('http://player-geoquizzatelier.pagekite.me/series/')
+        .get('http://player-geoquizzatelier.pagekite.me/series/')
+        .then(response =>{
+          console.log(response);
+          var coordonnee = this.position.split(' ');
+          that.map = L.map('mapid').setView([this.coordonnee[0],this.coordonnee[1]], 14);
+          that.position=response.data[0].map_refs;
+          var corner1 = L.latLng(this.coordonnee[0]+50,this.coordonnee[1]+50),
+          corner2 = L.latLng(this.coordonnee[0]-50,this.coordonnee[1]-50),
+          bounds = L.latLngBounds(corner1, corner2);
+        })
+        .catch(error => {
+          console.log("pas de coordonnée");
+        });
+        
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
+
+
+        
+
+        L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
+
+        this.map.fitBounds(bounds);
+        this.map.setMaxBounds(bounds);
+
+        /*var testIcon = L.icon({
+          iconUrl: 'https://www.icone-png.com/ico/8/7603.ico', iconSize: [20, 20]
+        })
+        this.testmark = L.marker([48.6828782, 6.1611891], { icon: testIcon }).addTo(this.map);*/
+
+        this.map.on('click', this.selectPos);
+        var params = this.extractUrlParams()
+        axios
+          .post('http://player-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
           .then(response => {
-            console.log(response);
-            var coordonnee = this.position.split(' ');
-            this.map = L.map('mapid').setView([this.coordonnee[0], this.coordonnee[1]], 14);
-            this.position = response.data[0].map_refs;
-            this.corner1 = L.latLng(this.coordonnee[0] + 50, this.coordonnee[1] + 50),
-            this.corner2 = L.latLng(this.coordonnee[0] - 50, this.coordonnee[1] - 50),
-              bounds = L.latLngBounds(this.corner1, this.corner2);
+            if (response) {
+              axios
+                .get("http://player-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
+                  headers: {
+                    'x-lbs-token': response.data.token
+                  }
+                })
+                .then(response => {
+                  this.joueur = params.player;
+                  this.id = response.data.id;
+                  
+                  this.token = response.data.token;
+                  this.nb_photos = response.data.photos.length;
+                  this.status = response.data.status;
+                  this.joueur = response.data.joueur;
+                  for (i = 0; i < this.nb_photos; i++) {
+                    var element = response.data.photos[i];
+                    this.photos.push(new Photo(element.id, element.description, element.position, element.url));
+                  }
+                  this.current_target = 0;
+                  this.current_photo = this.photos[this.current_target];
 
-      })
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(this.map);
-
-
-
-
-            L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
-
-            this.map.fitBounds(bounds);
-            this.map.setMaxBounds(bounds);
-
-
-
-            this.map.on('click', this.selectPos);
-            var params = this.extractUrlParams()
-            axios
-              .post('http://player-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
-              .then(response => {
-                if (response) {
-                  axios
-                    .get("http://player-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
-                      headers: {
-                        'x-lbs-token': response.data.token
-                      }
-                    })
-                    .then(response => {
-                      this.joueur = params.player;
-                      this.id = response.data.id;
-
-                      this.token = response.data.token;
-                      this.nb_photos = response.data.photos.length;
-                      this.status = response.data.status;
-                      this.joueur = response.data.joueur;
-                      for (i = 0; i < this.nb_photos; i++) {
-                        var element = response.data.photos[i];
-                        this.photos.push(new Photo(element.id, element.description, element.position, element.url));
-                      }
-                      this.current_target = 0;
-                      this.current_photo = this.photos[this.current_target];
-
-                    })
-                }
-              })
-          .catch(error => {
-            console.log("pas de coordonnée");
-          });
-    }
+                })
+            }
+          })
+      }
     })
 
   </script>
