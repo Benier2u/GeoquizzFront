@@ -195,24 +195,27 @@
       created() {
         let that = this;
         axios
-        .post('http://back-geoquizzatelier.pagekite.me/series/')
+        .get('http://player-geoquizzatelier.pagekite.me/series/')
         .then(response =>{
-          that.position=response.data.position;
+          console.log(response);
+          var coordonnee = this.position.split(' ');
+          this.map = L.map('mapid').setView([this.coordonnee[0],this.coordonnee[1]], 14);
+          that.position=response.data[0].map_refs;
+          var corner1 = L.latLng(this.coordonnee[0]+50,this.coordonnee[1]+50),
+          corner2 = L.latLng(this.coordonnee[0]-50,this.coordonnee[1]-50),
+          bounds = L.latLngBounds(corner1, corner2);
         })
         .catch(error => {
           console.log("pas de coordonnée");
         });
-        this.position = this.position.split(' ');
-        this.map = L.map('mapid').setView([this.position[0],this.potsition[1]], 14);
+        
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.map);
 
 
-        var corner1 = L.latLng(this.position[0]+50,this.position[1]+50),
-          corner2 = L.latLng(this.position[0]-50,this.position[1]-50),
-          bounds = L.latLngBounds(corner1, corner2);
+        
 
         L.rectangle(bounds, { color: "#000", weight: 2.5, fillOpacity: 0 }).addTo(this.map);
 
@@ -227,11 +230,11 @@
         this.map.on('click', this.selectPos);
         var params = this.extractUrlParams()
         axios
-          .post('http://back-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
+          .post('http://player-geoquizzatelier.pagekite.me/series/' + params.ville + '/parties', { joueur: params.player })
           .then(response => {
             if (response) {
               axios
-                .get("http://back-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
+                .get("http://player-geoquizzatelier.pagekite.me/parties/" + response.data.id, {
                   headers: {
                     'x-lbs-token': response.data.token
                   }
