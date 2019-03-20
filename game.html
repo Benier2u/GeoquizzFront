@@ -110,10 +110,7 @@
   <script>
 
 
-    //constructeur de la carte qui prend en paramêtre le conteneur HTML
-
-    //dans lequel la carte doit s'afficher et les options
-
+// Classe photo pour mapper facilement les données lors de la recupération
     class Photo {
       constructor(id, description, position, url) {
         this.id = id;
@@ -148,6 +145,7 @@
 
       },
       methods: {
+        //Methode qui reset le marker
         selectPos(e) {
           if (this.current_pos == null) {
             this.current_pos = L.marker([e.latlng.lat, e.latlng.lng], { draggable: true }).addTo(this.map);
@@ -158,6 +156,7 @@
         calculDistance(x1,y1,x2,y2){
 
         },
+        //Action lors du passage a la photo suivante: ajout du score, reset du marker, changement de photo
         nextPhoto() {
           if (this.current_pos == null) {
             alert('Vous devez placer le pointeur en click sur la carte avant de valider !')
@@ -177,10 +176,12 @@
             this.current_pos = null;
           }
         },
+        //Calcul le score et redirige sur la dernière page
         endGame() {
           var finalScore = ((this.nb_photos * 10) - this.score);
           document.location.href = "score.html?player=" + this.joueur + "&score=" + finalScore + "&total=" + this.nb_photos;
         },
+        //Methode equivalente à new URL search: recuperation de paramètres
         extractUrlParams() {
           var t = location.search.substring(1).split('&');
           var f = [];
@@ -191,6 +192,7 @@
           return f;
         }
       },
+      //initialisation du jeu: recuperation des informations et mappage, creation de la carte, delimitation de la carte
       created() {
         this.map = L.map('mapid').setView([48.692054, 6.184417], 14);
 
@@ -207,11 +209,6 @@
 
         this.map.fitBounds(bounds);
         this.map.setMaxBounds(bounds);
-
-        /*var testIcon = L.icon({
-          iconUrl: 'https://www.icone-png.com/ico/8/7603.ico', iconSize: [20, 20]
-        })
-        this.testmark = L.marker([48.6828782, 6.1611891], { icon: testIcon }).addTo(this.map);*/
 
         this.map.on('click', this.selectPos);
         var params = this.extractUrlParams()

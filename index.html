@@ -121,6 +121,7 @@
                 seriesList: []
             },
             methods: {
+            //Methode equivalente à new URL search: recuperation de paramètres
                 extractUrlParams() {
                     var t = location.search.substring(1).split('&');
                     var f = [];
@@ -130,13 +131,14 @@
                     }
                     return f;
                 },
+                //Methode executé lors d'un problème de connexion
                 noConnection() {
                     alert("Problème de connexion, veuillez réessayer ultérieurement")
                 }
             },
+            //Récupération des séries
             created() {
                 var params = this.extractUrlParams();
-                //setTimeout(this.noConnection, 2000);
                 axios
                     .get("http://back-geoquizzatelier.pagekite.me/series")
                     .then(response => {

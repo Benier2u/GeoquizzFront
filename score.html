@@ -120,6 +120,7 @@
         total: 0
       },
       methods: {
+        //Methode equivalente à new URL search: recuperation de paramètres
         extractUrlParams() {
           var t = location.search.substring(1).split('&');
           var f = [];
@@ -129,10 +130,12 @@
           }
           return f;
         },
+        //Relance le jeu
         playAgain() {
           document.location.href = "index.html";
         }
       },
+      //Recupère les informations
       created() {
         var params = this.extractUrlParams();
         this.score = params.score;
